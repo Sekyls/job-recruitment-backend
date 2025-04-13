@@ -1,0 +1,245 @@
+{
+  "info": {
+    "name": "Job Recruitment API",
+    "description": "Backend APIs for the Job Recruitment Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth Routes",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Dennis Sekyi Opoku\",\n    \"email\": \"denipsyp@gmail.com\",\n    \"password\": \"pass12345\",\n    \"role\": \"seeker\",\n    \"dateOfBirth\": \"1998-08-12\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"denipsyp@gmail.com\",\n    \"password\": \"pass12345\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Job Routes",
+      "item": [
+        {
+          "name": "Post Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer <YOUR_EMPLOYER_JWT_TOKEN>",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/jobs/post-job",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "jobs", "post-job"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"FullStack Developer\",\n  \"description\": \"Build and maintain full-stack applications\",\n  \"requirements\": \"3+ years of experience in MERN stack\",\n  \"location\": \"Remote\",\n  \"industry\": \"Information Technology\",\n  \"skills\": [\"JavaScript\", \"React\", \"Node.js\", \"MongoDB\"]\n}"
+            },
+            "description": "**NOTE:**\n- Only users with the role `employer` can create jobs.\n- Register an employer via `/api/auth/register` by setting `role` to `employer`.\n- Login with that employer account to receive a token.\n- Add the token to the request header as:\n  ```\n  Authorization: Bearer <YOUR_JWT_TOKEN>\n  ```"
+          }
+        },
+        {
+          "name": "Get All Jobs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/jobs/search",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "jobs", "search"]
+            }
+          }
+        },
+        {
+          "name": "Get Job By ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/jobs/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "jobs", ":id"]
+            },
+            "description": "**NOTE:**\n- You will need a valid job ID from the database by searching for all jobs.\n- Replace `:id` in the route URL with the valid job ID.\n- This means you must create a job first before you can fetch, update, or delete it by ID."
+          }
+        },
+        {
+          "name": "Update Job",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "http://localhost:5000/api/jobs/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "jobs", ":id"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer <your-jwt-token>",
+                "description": "Include the JWT token of the employer who created the job."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"FullStack Developer Updated\",\n  \"description\": \"Build and maintain full-stack applications (updated)\",\n  \"requirements\": \"10+ years of experience in MERN stack\",\n  \"location\": \"OnSite\",\n  \"industry\": \"Fintech\",\n  \"skills\": [\"JavaScript\", \"React\", \"Node.js\", \"MongoDB\"]\n}"
+            }
+          },
+          "description": "This route is protected. Only the employer who created the job can update it. Include a valid JWT token in the request header.\n**NOTE:**\n- You will need a valid job ID from the database by searching for all jobs.\n- Replace `:id` in the route URL with the valid job ID.\n- This means you must create a job first before you can fetch, update, or delete it by ID."
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:5000/api/jobs/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "jobs", ":id"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer <your-jwt-token>",
+                "description": "Include the JWT token of the employer who created the job."
+              }
+            ]
+          },
+          "description": "This route is protected. Only the employer who created the job can update it. Include a valid JWT token in the request header.\n**NOTE:**\n- You will need a valid job ID from the database by searching for all jobs.\n- Replace `:id` in the route URL with the valid job ID.\n- This means you must create a job first before you can fetch, update, or delete it by ID."
+        }
+      ]
+    },
+    {
+      "name": "Application Routes",
+      "item": [
+        {
+          "name": "Apply to Job",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:5000/api/apply/:jobId",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "apply", ":jobId"]
+            },
+            "description": "### Apply to Job\n\nThis endpoint allows a job seeker to apply to a job by submitting their CV (or other documents) and a cover letter. The file is uploaded as 'multipart/form-data'.",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "cv",
+                  "type": "file",
+                  "src": "/path/to/file.pdf",
+                  "description": "CV file to upload"
+                },
+                {
+                  "key": "coverLetter",
+                  "type": "text",
+                  "value": "This is my cover letter.",
+                  "description": "Applicant's cover letter"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Job Applications (Employer View)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/employer/applications/:jobId",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "employer", "applications", ":jobId"]
+            },
+            "description": "This endpoint allows employers to view job applications for jobs they posted.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_JWT_TOKEN",
+                "type": "text"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get User's Applications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/applications/user/:userId",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "applications", "user", ":userId"]
+            },
+            "description": "This endpoint allows a job seeker to view all job applications they have submitted.\n\n Make sure to:\n- Replace `{{USER_ID}}` with the actual MongoDB _id of the user.\n- Provide a valid JWT token in the `Authorization` header.\n\nThe response will include the job applied to, plus file info if uploaded."
+          },
+          "response": []
+        }
+      ],
+      "variable": [
+        {
+          "key": "JWT_TOKEN",
+          "value": ""
+        },
+        {
+          "key": "USER_ID",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}
