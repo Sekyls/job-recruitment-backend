@@ -1,10 +1,14 @@
-module.exports = function (err, req, res, next) {
-  console.error(err.stack);
+module.exports = (err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err); // let Express handle it
+  }
+
   res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message: err.message || 'Server Error'
   });
 };
+
 // This middleware function is used to handle errors in the Express application.
 // It takes four parameters: err, req, res, and next.
 // The function logs the error stack to the console and sends a JSON response with the error message and status code.
